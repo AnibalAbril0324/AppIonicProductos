@@ -1,0 +1,7 @@
+{
+  "name": "Productos-Ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

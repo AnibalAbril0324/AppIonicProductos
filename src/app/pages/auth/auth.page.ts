@@ -23,6 +23,7 @@ export class AuthPage implements OnInit {
   ngOnInit() {
   }
 
+  //la palabra async representa la eventual finalizacion (exito o fracaso) de una operacion asincrona
 async submit(){
   if(this.form.valid){
     
@@ -34,6 +35,13 @@ async submit(){
 
     }).catch(error => {
       console.log(error);
+      this.utilsSvc.presentToast({
+        message: 'ERROR  EL CORREO O CONTRASEÑA SON INCORRECTOS',
+        duration: 2500,
+        color:'primary',
+        position:'middle',
+        icon: 'alert-circle'
+      });
 
     }).finally( () => {
       loading.dismiss();

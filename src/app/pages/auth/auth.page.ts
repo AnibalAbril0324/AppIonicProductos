@@ -30,7 +30,9 @@ async submit(){
     const loading=await this.utilsSvc.loading();
     await loading.present();
     
+    //imprime en consola las credenciales ingresadas
     this.firebaseService.singIn(this.form.value as User).then(res => {
+      //imprime la respuesta a las credenciales ingresadas desde firebase
       console.log(res);
 
     }).catch(error => {

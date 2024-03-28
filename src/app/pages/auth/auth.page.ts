@@ -24,32 +24,78 @@ export class AuthPage implements OnInit {
   }
 
   //la palabra async representa la eventual finalizacion (exito o fracaso) de una operacion asincrona
-async submit(){
-  if(this.form.valid){
-    
+  async submit(){
+    if(this.form.valid){
+      
     const loading=await this.utilsSvc.loading();
     await loading.present();
-    
-    //imprime en consola las credenciales ingresadas
-    this.firebaseService.singIn(this.form.value as User).then(res => {
-      //imprime la respuesta a las credenciales ingresadas desde firebase
-      console.log(res);
+      
+      //imprime en consola las credenciales ingresadas
+      this.firebaseService.singIn(this.form.value as User).then(res => {
+        //imprime la respuesta a las credenciales ingresadas desde firebase
+        //console.log(res);
+      this.getUserInfo(res.user.uid);
 
-    }).catch(error => {
-      console.log(error);
+      }).catch(error => {
+        console.log(error);
+        this.utilsSvc.presentToast({
+          message: 'ERROR  EL CORREO O CONTRASEÑA SON INCORRECTOS',
+          duration: 2500,
+          color:'primary',
+          position:'middle',
+          icon: 'alert-circle'
+        });
+
+      }).finally( () => {
+        loading.dismiss();
+      })
+    }
+    console.log(this.form.value);
+  }
+
+
+  async getUserInfo(uid:string) {
+    if(this.form.valid){
+      
+      const loading=await this.utilsSvc.loading();
+      await loading.present();
+      
+      // obtengo el uid 
+      // al usar comillas invertidas hace referencia a que envio en valor de la variable uid
+      let path = `users/${uid}`;
+  
+      this.firebaseService.getDocument(path).then((user:User) => {
+      
+      this.utilsSvc.saveInLocalStorage('user',user);
+      //enrutamos a la pagina home
+      this.utilsSvc.routerLink('/main/home')    
+      //limpiamos los campos del formulario 
+      this.form.reset();
+      
       this.utilsSvc.presentToast({
-        message: 'ERROR  EL CORREO O CONTRASEÑA SON INCORRECTOS',
-        duration: 2500,
+        message: `Te damos la bienvenida ${user.name}`,
+        duration: 1500,
         color:'primary',
         position:'middle',
-        icon: 'alert-circle'
+        icon: 'person-circle-outline'
       });
 
-    }).finally( () => {
-      loading.dismiss();
-    })
-  }
-  console.log(this.form.value);
+      }).catch(error => {
+        console.log(error);
+        
+        this.utilsSvc.presentToast({
+          message: 'ERROR EL CORREO O CONTRASEÑA SON INCORRECTOS',
+          duration: 2500,
+          color:'primary',
+          position:'middle',
+          icon: 'alert-circle'
+        });
 
-}
+      }).finally( () => {
+        loading.dismiss();
+      })
+    }
+    console.log(this.form.value);
+
+  }
 }

@@ -7,6 +7,7 @@ import { LogoComponent } from './components/logo/logo.component';
 //importamos los modulos que necesito para 
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AddUpdateProductsComponent } from './components/add-update-products/add-update-products.component';
 
 
 
@@ -15,13 +16,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   //importamos los componentes 
     HeaderComponent, 
     CustomInputComponent,
-    LogoComponent
+    LogoComponent,
+    AddUpdateProductsComponent
   ],
   exports:[
     HeaderComponent,
     CustomInputComponent,
     LogoComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AddUpdateProductsComponent
   ],
   imports: [
     CommonModule,

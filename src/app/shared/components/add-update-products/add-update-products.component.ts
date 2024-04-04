@@ -24,7 +24,11 @@ export class AddUpdateProductsComponent  implements OnInit {
   firebaseService =inject(FirebaseService);
   utilsSvc=inject(UtilsService)
   
+  //declaramos una variable user que es igual a un objeto
+  user={} as User;
+
   ngOnInit() {
+    this.user= this.utilsSvc.getFromLocalStorage('user');
   }
 
   async takeImage(){
@@ -36,20 +40,34 @@ export class AddUpdateProductsComponent  implements OnInit {
 async submit(){
     if(this.form.valid){
       
+      let path= `users/${this.user.uid}/products`
+      
       const loading=await this.utilsSvc.loading();
       await loading.present();
       
+      //subir la imagen y obtener la url
+      let dataUrl = this.form.value.image;
+      let imagePath= `${this.user.uid}/${Date.now()}`;
+      let imageUrl = await this.firebaseService.uploadImage(imagePath,dataUrl); 
+      this.form.controls.image.setValue(imageUrl);
+
+      //eliminamos el id porque estamos agregando un producto
+      delete this.form.value.id 
+      
+      
       //imprime en consola las credenciales ingresadas
       //enviamos el formulario al servicio para crear usuarios nuevos
-      this.firebaseService.singUp(this.form.value as User).then( async res => {
+      this.firebaseService.addDocument(path,this.form.value).then( async res => {
         
-        await this.firebaseService.updateUser(this.form.value.name);
+        this.utilsSvc.dismisModal({success: true}); //cerramos el modal cuando se crea exitosamente 
 
-        //obtenemos el uid y lo agregamos al formulario
-        let uid= res.user.uid;
-
-        //imprime la respuesta a las credenciales ingresadas desde firebase
-        console.log(res);
+        this.utilsSvc.presentToast({
+          message: 'Producto Creado Exitosamente',
+          duration: 1500,
+          color:'success',
+          position:'middle',
+          icon: 'checkmark-circle-outline'
+        });
 
       }).catch(error => {
         console.log(error);

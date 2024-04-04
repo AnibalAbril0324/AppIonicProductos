@@ -27,6 +27,11 @@ export class AddUpdateProductsComponent  implements OnInit {
   ngOnInit() {
   }
 
+  async takeImage(){
+    const dataUrl= (await this.utilsSvc.takePicture('Imagen del Producto')).dataUrl;
+    this.form.controls.image.setValue(dataUrl);
+  }
+
   //la palabra async representa la eventual finalizacion (exito o fracaso) de una operacion asincrona
 async submit(){
     if(this.form.valid){

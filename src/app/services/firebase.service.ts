@@ -5,7 +5,7 @@ import { User } from '../models/user.models';
 
 //==============Firestore=====================
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, setDoc, doc, getDoc, addDoc, collection } from '@angular/fire/firestore';
+import { getFirestore, setDoc, doc, getDoc, addDoc, collection,collectionData,query, updateDoc   } from '@angular/fire/firestore';
 import { UtilsService } from './utils.service';
 import {getStorage, uploadString, ref, getDownloadURL  } from "firebase/storage";
 
@@ -18,7 +18,6 @@ export class FirebaseService {
   firestore = inject(AngularFirestore);
   utilsSvc =inject(UtilsService);
   storage = inject(AngularFirestore);
-
 
   constructor() { }
 
@@ -54,12 +53,28 @@ export class FirebaseService {
     localStorage.removeItem('user');
     this.utilsSvc.routerLink('/auth');
   }
+
     // ===========Base de datos==========================
+
+  //========obtener dod de la base ======================
+  //el ? se utiliza para requerir o no la coleccion
+  getCollectionData(path:string, collectionQuery?:any ){
+    const ref = collection(getFirestore(),path);
+    return collectionData(query(ref,collectionQuery),{idField:'id'});
+    //obtenemos los productos desde la coleccion
+  }
+
     //============== Setear un documento =================
     //guardamos los datos del usuario
   setDocument(path:string,data:any){  
     return setDoc (doc(getFirestore(), path), data);
   }
+
+    //actualizar los datos del usuario
+  updateDocument(path:string,data:any){  
+    return updateDoc(doc(getFirestore(), path), data);
+  }
+
   //============== obtener un documento =================
   async getDocument(path:string){
     return (await getDoc(doc(getFirestore(), path))).data();
@@ -77,4 +92,8 @@ export class FirebaseService {
     })
   }
 
+  //=====obtener ruta de la img con su url
+  async getFilePath(url:string){
+    return ref(getStorage(),url).fullPath
+  }
 }

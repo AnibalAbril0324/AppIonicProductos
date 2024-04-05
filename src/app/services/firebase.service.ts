@@ -5,9 +5,9 @@ import { User } from '../models/user.models';
 
 //==============Firestore=====================
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, setDoc, doc, getDoc, addDoc, collection,collectionData,query, updateDoc   } from '@angular/fire/firestore';
+import { getFirestore, setDoc, doc, getDoc, addDoc, collection,collectionData,query, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { UtilsService } from './utils.service';
-import {getStorage, uploadString, ref, getDownloadURL  } from "firebase/storage";
+import {getStorage, uploadString, ref, getDownloadURL, deleteObject } from "firebase/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +75,11 @@ export class FirebaseService {
     return updateDoc(doc(getFirestore(), path), data);
   }
 
+    //eliminar un documento
+  deleteDocument(path:string){  
+    return deleteDoc(doc(getFirestore(), path));
+  }
+
   //============== obtener un documento =================
   async getDocument(path:string){
     return (await getDoc(doc(getFirestore(), path))).data();
@@ -92,8 +97,13 @@ export class FirebaseService {
     })
   }
 
-  //=====obtener ruta de la img con su url
+  //=====obtener ruta de la img con su url===========
   async getFilePath(url:string){
     return ref(getStorage(),url).fullPath
+  }
+
+   //===eliminar archivo===
+  deleteFile(path:string){
+    return deleteObject(ref(getStorage(),path));
   }
 }

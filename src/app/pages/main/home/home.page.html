@@ -30,10 +30,10 @@
           <!--boton editar-->
         <ion-item-option (click)="addUpdateProduct(p)">
           <ion-icon  class="option-btn" name="create-outline"></ion-icon>
-        </ion-item-option>
+        </ion-item-option>  
 
           <!--botoon eliminar-->
-        <ion-item-option color="danger" side="start">
+        <ion-item-option (click)="confirmDeleteProduct(p)" color="danger" side="start">
           <ion-icon class="option-btn" name="trash-outline"></ion-icon>
         </ion-item-option>
         

@@ -60,7 +60,7 @@ export class FirebaseService {
   //el ? se utiliza para requerir o no la coleccion
   getCollectionData(path:string, collectionQuery?:any ){
     const ref = collection(getFirestore(),path);
-    return collectionData(query(ref,collectionQuery),{idField:'id'});
+    return collectionData(query(ref,...collectionQuery),{idField:'id'});
     //obtenemos los productos desde la coleccion
   }
 

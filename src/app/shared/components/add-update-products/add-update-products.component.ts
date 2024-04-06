@@ -46,6 +46,13 @@ export class AddUpdateProductsComponent  implements OnInit {
       else this.createProduct();
     }
   }
+  //===convierte valores de string a numero========
+  setNumbersInputs(){
+    let {soldUnits, price} = this.form.controls;
+
+    if(soldUnits.value) soldUnits.setValue(parseFloat(soldUnits.value));
+    if(price.value) price.setValue(parseFloat(price.value));
+  }
 
   //=======crear=============
   //la palabra async representa la eventual finalizacion (exito o fracaso) de una operacion asincrona

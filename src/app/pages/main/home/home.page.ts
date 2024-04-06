@@ -17,7 +17,7 @@ export class HomePage implements OnInit {
 
   //arreglo de produtos
   products: Product []=[];
-
+  loading:boolean =false;
 
   ngOnInit() {
   }
@@ -37,11 +37,12 @@ export class HomePage implements OnInit {
   //======obtener productos===============
   getProductos(){
     let path= `users/${this.user().uid}/products`
-
+    this.loading=true;
     let sub=this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
         console.log(res);
         this.products = res;
+        this.loading=false;
         sub.unsubscribe();
       }
     })

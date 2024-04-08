@@ -42,6 +42,11 @@ export class HomePage implements OnInit {
     }, 1000);
   }
 
+  //====obtener ganancias=========
+  getProfits(){
+    return this.products.reduce((index,product) => index + product.price * product.soldUnits,0);
+  }
+
   //======obtener productos===============
   getProductos(){
     let path= `users/${this.user().uid}/products`

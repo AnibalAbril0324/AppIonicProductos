@@ -30,6 +30,7 @@ export class HomePage implements OnInit {
   user(): User{
     return this.utilsSvc.getFromLocalStorage('user');
   }
+  
   //sireve para entrar en la funcion cada vez que el usuario entra en la pagina
   ionViewWillEnter() {
     this.getProductos();
